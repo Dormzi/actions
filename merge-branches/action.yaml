@@ -17,7 +17,7 @@ runs:
     - name: merge ${{ inputs.source_branch }} into ${{ inputs.destination_branch }}
       shell: bash
       run: |
-        sh ./merge-branches/run.sh
+        sh ./run.sh
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         SOURCE_BRANCH: ${{ inputs.source_branch }}
