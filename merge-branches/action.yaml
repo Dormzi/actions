@@ -17,6 +17,8 @@ runs:
     - name: merge ${{ inputs.source_branch }} into ${{ inputs.destination_branch }}
       shell: bash
       run: |
+        echo $PWD
+        ls -l
         sh ./run.sh
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
