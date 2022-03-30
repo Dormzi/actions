@@ -1,0 +1,24 @@
+name: 'Merge two branches and force push'
+
+description: Merge one branch into another & force push
+inputs:
+  source_branch:
+    description: Branch name to pull from, default is triggered branch
+    required: false
+  destination_branch:
+    description: Branch name merge into in this repo
+    required: true
+  github_token:
+    description: GitHub token secret
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: merge ${{ inputs.source_branch }} into ${{ inputs.destination_branch }}
+      shell: bash
+      run: |
+        sh ./merge-branches/run.sh
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        SOURCE_BRANCH: ${{ inputs.source_branch }}
+        DESTINATION_BRANCH: ${{ inputs.destination_branch }}
