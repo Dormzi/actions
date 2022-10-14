@@ -43,18 +43,18 @@ runs:
         git fetch
         cd repo
 
-        git checkout $SOURCE_BRANCH
+        git checkout $SOURCE
         git pull
 
         git checkout $DESTINATION_BRANCH
         git push -d origin $DESTINATION_BRANCH
         git branch -d $DESTINATION_BRANCH
 
-        git checkout  $SOURCE_BRANCH
+        git checkout  $SOURCE
         git checkout -b $DESTINATION_BRANCH
 
         git push --force
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
-        SOURCE_BRANCH: ${{ inputs.source_branch }}
+        SOURCE: ${{ inputs.source }}
         DESTINATION_BRANCH: ${{ inputs.destination_branch }}
