@@ -1,0 +1,60 @@
+name: 'Recreate branch and force push'
+
+description: Merge one branch into another & force push
+inputs:
+  source:
+    description: Branch name or tag name to pull from
+    required: true
+  destination_branch:
+    description: Branch name to merge into in this repo
+    required: true
+  github_token:
+    description: GitHub token secret
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: merge ${{ inputs.source }} into ${{ inputs.destination_branch }}
+      shell: bash
+      run: |
+        if [ -z "$GITHUB_TOKEN" ]; then
+          echo "Set the GITHUB_TOKEN environment variable."
+          exit 1
+        fi
+
+        if [ -z "$SOURCE" ]; then
+          echo "Set the SOURCE environment variable."
+          exit 1
+        fi
+
+        if [ -z "$DESTINATION_BRANCH" ]; then
+          echo "Set the DESTINATION_BRANCH environment variable."
+          exit 1
+        fi
+
+        # Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
+        export GITHUB_USER="$GITHUB_ACTOR"
+
+        git config --global user.email "$GITHUB_ACTOR"
+        git config --global user.name "$GITHUB_ACTOR"
+        git config --global pull.ff only
+
+        git clone "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" repo
+        git fetch
+        cd repo
+
+        git checkout $SOURCE_BRANCH
+        git pull
+
+        git checkout $DESTINATION_BRANCH
+        git push -d origin $DESTINATION_BRANCH
+        git branch -d $DESTINATION_BRANCH
+
+        git checkout  $SOURCE_BRANCH
+        git checkout -b $DESTINATION_BRANCH
+
+        git push --force
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        SOURCE_BRANCH: ${{ inputs.source_branch }}
+        DESTINATION_BRANCH: ${{ inputs.destination_branch }}
