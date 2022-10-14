@@ -50,8 +50,7 @@ runs:
         git push -d origin $DESTINATION_BRANCH
         git branch -d $DESTINATION_BRANCH
 
-        git checkout  $SOURCE
-        git checkout -b $DESTINATION_BRANCH
+        git checkout $SOURCE -b $DESTINATION_BRANCH
 
         git push --force
       env:
