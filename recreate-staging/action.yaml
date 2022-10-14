@@ -45,7 +45,7 @@ runs:
 
         git checkout $SOURCE
 
-        git push origin $SOURCE:$DESTINATION_BRANCH --force
+        git push origin $SOURCE:refs/heads/$DESTINATION_BRANCH --force
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         SOURCE: ${{ inputs.source }}
